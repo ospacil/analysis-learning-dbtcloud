@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: stripe_payments
+    database: hive_metastore
+    schema: default
+    tables:
+      - name: stripe_payments
