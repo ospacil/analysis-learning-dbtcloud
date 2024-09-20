@@ -1,10 +1,8 @@
-{{ config(materialized='table') }}
-
 WITH coupon_user_ids
   AS (
 
 SELECT *
-  FROM {{ ref('user_ids_with_payment_by_coupon')}}
+  FROM {{ ref('inter_user_ids_with_payment_by_coupon')}}
 )
 
 SELECT jaffle_shop_customers.*,

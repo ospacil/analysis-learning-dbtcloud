@@ -1,7 +1,7 @@
 WITH coupon_orders
    AS (
 SELECT *
-  FROM {{ ref("stripe_payments_by_coupon") }}
+  FROM {{ ref("inter_stripe_payments_by_coupon") }}
 )
 
 SELECT USER_ID,
