@@ -7,3 +7,15 @@ sources:
     tables:
       - name: jaffle_shop_customers
       - name: jaffle_shop_orders
+        freshness: 
+          warn_after:
+            count: 365
+            period: day
+        loaded_at_field: CAST(ORDER_DATE AS TIMESTAMP)
+
+  - name: stripe_payments
+    database: hive_metastore
+    schema: default
+    tables:
+      - name: stripe_payments
+        
