@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: stg_stripe_payments_by_coupon
+    description: Table of stripe payments filtered for coupon payments method and success status only.
+    columns:
+      - name: id
+        description: Primary key
+        data_tests:
+          - unique
+          - not_null
+      - name: orderid
+        description: References the order placed.
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              field: order_id
+              to: ref('stg_orders')
+      - name: paymentmethod
+        description: 'The payment method used. Eligible values: {{ doc("payment_methods") }}'
+        data_tests:
+          - accepted_values:
+              values:
+                - "coupon"
+      - name: status
+        description: Tells us whether the payment succeeded or failed.
+        data_tests:
+          - accepted_values:
+              values:
+                - "success"
+              
+      
+          
