@@ -38,7 +38,7 @@ models:
               field: order_id
               to: ref('stg_orders')
       - name: paymentmethod
-        description: The various payment methods. See {{ doc("payment_methods") }} for possible values.
+        description: '{{ doc("payment_methods") }}'
         data_tests:
           - accepted_values:
               values:
