@@ -6,7 +6,21 @@ sources:
     schema: default
     tables:
       - name: jaffle_shop_customers
+        columns:
+          - name: id
+            data_tests:
+              - unique
+              - not_null
+                  
       - name: jaffle_shop_orders
+        columns:
+          - name: id
+            data_tests:
+              - unique
+              - not_null
+          - name: user_id
+            data_tests:
+              - not_null
         freshness: 
           warn_after:
             count: 365

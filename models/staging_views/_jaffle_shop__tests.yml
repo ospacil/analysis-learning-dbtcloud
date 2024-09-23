@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: stg_orders
+    columns:
+      - name: order_id
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              field: customer_id
+              to: ref('stg_customers')
+  - name: stg_customers
+    columns:
+      - name: customer_id
+        data_tests:
+          - unique
+          - not_null
+  - name: stg_stripe_payments_by_coupon
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+      - name: orderid
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              field: order_id
+              to: ref('stg_orders')
+      - name: paymentmethod
+        data_tests:
+          - accepted_values:
+              values:
+                - "coupon"
+      - name: status
+        data_tests:
+          - accepted_values:
+              values:
+                - "success"
+              
+      
+          
