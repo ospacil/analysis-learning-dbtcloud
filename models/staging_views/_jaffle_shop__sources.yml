@@ -2,34 +2,38 @@ version: 2
 
 sources:
   - name: jaffle_shop
+    description: Database of raw jaffle shop data.
     database: hive_metastore
     schema: default
     tables:
       - name: jaffle_shop_customers
+        description: Raw table of jaffle shop customers.
         columns:
           - name: id
+            description: Primary key. The customer ID.
             data_tests:
               - unique
               - not_null
                   
       - name: jaffle_shop_orders
+        description: Raw table of jaffle shop orders.
         columns:
           - name: id
+            description: Primary key. The order ID.
             data_tests:
               - unique
               - not_null
           - name: user_id
+            description: Foreign key referencing the customer ID.
             data_tests:
               - not_null
+              - relationships:
+                  field: id
+                  to: source('jaffle_shop', 'jaffle_shop_customers')
         freshness: 
           warn_after:
             count: 365
             period: day
         loaded_at_field: CAST(ORDER_DATE AS TIMESTAMP)
 
-  - name: stripe_payments
-    database: hive_metastore
-    schema: default
-    tables:
-      - name: stripe_payments
         
