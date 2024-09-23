@@ -4,10 +4,12 @@ models:
   - name: stg_orders
     columns:
       - name: order_id
+        description: Primary key
         data_tests:
           - unique
           - not_null
       - name: customer_id
+        description: References customer who placed the order.
         data_tests:
           - not_null
           - relationships:
@@ -16,16 +18,19 @@ models:
   - name: stg_customers
     columns:
       - name: customer_id
+        description: Primary key
         data_tests:
           - unique
           - not_null
   - name: stg_stripe_payments_by_coupon
     columns:
       - name: id
+        description: Primary key
         data_tests:
           - unique
           - not_null
       - name: orderid
+        description: References the order placed.
         data_tests:
           - unique
           - not_null
@@ -33,11 +38,13 @@ models:
               field: order_id
               to: ref('stg_orders')
       - name: paymentmethod
+        description: '{{ doc("payment_methods") }}'
         data_tests:
           - accepted_values:
               values:
                 - "coupon"
       - name: status
+        description: Tells us whether the payment succeeded or failed.
         data_tests:
           - accepted_values:
               values:
