@@ -2,11 +2,11 @@ version: 2
 
 sources:
   - name: stripe_payments
-    database: hive_metastore
+    database: secret-timing-436620-s7
     description: Database of raw data on stripe payments.
-    schema: default
+    schema: jaffle_shop
     tables:
-      - name: stripe_payments
+      - name: stripe-payments
         description: Raw stripe payments data.
         columns:
           - name: id
