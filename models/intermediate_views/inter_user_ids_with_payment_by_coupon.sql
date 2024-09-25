@@ -11,7 +11,7 @@ SELECT *
   )
 
 SELECT customer_id,
-       count_if(coupon_orders.STATUS = 'success') AS num_of_success_orders,
+       countif(coupon_orders.STATUS = 'success') AS num_of_success_orders,
        count(*) AS num_of_total_orders,
        sum(IF(coupon_orders.STATUS = 'success', AMOUNT, 0)) AS total_success_amount
   FROM jaffle_shop_orders
