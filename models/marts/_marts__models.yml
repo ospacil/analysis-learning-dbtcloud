@@ -4,10 +4,14 @@ models:
   - name: dim_orders
     description: Table of all orders, together with stripe payments for the order, if any.
     columns:
-      - name: order_id
-        description: Primary key. Unique identifier for the order.
+      - name: order_payment_id
+        description: Primary key. Unique identifier for the order concat identifier of the stripe payment attempt.
         data_tests:
           - unique
+          - not_null
+      - name: order_id
+        description: Identifier of the order. A single order can have several payments or none.
+        data_tests:
           - not_null
 
   - name: metric_flow_time_spine

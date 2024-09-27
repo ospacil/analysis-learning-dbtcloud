@@ -8,10 +8,11 @@ PAYMENT_INFO
   AS (
     SELECT *
       FROM {{ ref('stg_stripe_payments') }}
-     WHERE payment_status = 'success'
   )
 
-SELECT *, IF(payment_id IS NULL, FALSE, TRUE) AS order_has_been_paid
+SELECT CAST(order_id AS STRING) || '_' || CAST(payment_id AS STRING) AS order_payment_id, 
+       *,
+       IF(payment_id IS NULL, FALSE, TRUE) AS order_payment_attempted
   FROM ORDER_INFO
   LEFT JOIN PAYMENT_INFO
  USING (order_id)

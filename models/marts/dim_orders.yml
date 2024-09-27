@@ -1,12 +1,15 @@
 semantic_models:
-  - name: not_sure_yet
+  - name: sem_orders_with_payment_info_if_any
     defaults:
       agg_time_dimension: order_date
     model: ref('dim_orders')
     
     entities:
-      - name: order
+      - name: order_payment_attempt
         type: primary
+        expr: order_payment_id
+      - name: order
+        type: foreign
         expr: order_id
       - name: payment
         type: foreign
@@ -24,11 +27,14 @@ semantic_models:
         type: categorical
       - name: payment_method
         type: categorical
-      - name: order_has_been_paid
+      - name: order_payment_attempted
         type: categorical
-        expr: IF(order_has_been_paid = TRUE, 'Yes', 'No')
+        expr: IF(order_payment_attempted = TRUE, 'Yes', 'No')
 
     measures:
+      - name: num_of_payments
+        agg: count
+        expr: payment_id
       - name: revenue
         description: Total orders revenue
         agg: sum
