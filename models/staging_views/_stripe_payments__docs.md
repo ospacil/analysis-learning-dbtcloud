@@ -1,4 +1,6 @@
 {% docs payment_methods %}
+The payment method used. Eligible values: 
+
 
 | Payment method | Description |
 |----------------|-------------|

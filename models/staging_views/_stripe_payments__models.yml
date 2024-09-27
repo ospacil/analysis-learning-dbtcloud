@@ -1,6 +1,22 @@
 version: 2
 
 models:
+  - name: stg_stripe_payments
+    description: Table of stripe payments. Raw data btu with more user-friendly colum names.
+    columns:
+      - name: payment_id
+        description: Primary key. Unique identifier of payment attempt.
+        data_tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: Foreing key referencing the order for which payment was attempted.
+        data_tests:
+          - not_null
+          - relationships:
+              field: order_id
+              to: ref('stg_orders')
+  
   - name: stg_stripe_payments_by_coupon
     description: Table of stripe payments filtered for coupon payments method and success status only.
     columns:
@@ -18,7 +34,7 @@ models:
               field: order_id
               to: ref('stg_orders')
       - name: paymentmethod
-        description: 'The payment method used. Eligible values: {{ doc("payment_methods") }}'
+        description: '{{ doc("payment_methods") }}'
         data_tests:
           - accepted_values:
               values:

@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: dim_orders
+    description: Table of all orders, together with stripe payments for the order, if any.
+    columns:
+      - name: order_id
+        description: Primary key. Unique identifier for the order.
+        data_tests:
+          - unique
+          - not_null
+        
