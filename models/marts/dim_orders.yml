@@ -1,0 +1,45 @@
+semantic_models:
+  - name: not_sure_yet
+    defaults:
+      agg_time_dimension: order_date
+    model: ref('dim_orders')
+    
+    entities:
+      - name: order
+        type: primary
+        expr: order_id
+      - name: payment
+        type: foreign
+        expr: payment_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+    
+    dimensions:
+      - name: order_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: order_status
+        type: categorical
+      - name: payment_method
+        type: categorical
+      - name: order_has_been_paid
+        type: categorical
+        expr: IF(order_has_been_paid = TRUE, 'Yes', 'No')
+
+    measures:
+      - name: revenue
+        description: Total orders revenue
+        agg: sum
+        expr: payment_amount
+      - name: max_order_value
+        description: The highest value out of the placed orders.
+        agg: max
+        expr: payment_amount
+      - name: number_of_orders
+        agg: count_distinct
+        expr: order_id
+      - name: number_of_customers
+        agg: count_distinct
+        expr: customer_id
