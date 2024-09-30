@@ -1,0 +1,98 @@
+semantic_models:
+  - name: orders_with_payment_info
+    defaults:
+      agg_time_dimension: order_date
+    model: ref('dim_orders')
+    
+    entities:
+      - name: order_payment_attempt
+        type: primary
+        expr: order_payment_id
+      - name: order
+        type: foreign
+        expr: order_id
+      - name: payment
+        type: foreign
+        expr: payment_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+    
+    dimensions:
+      - name: order_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: order_status
+        type: categorical
+      - name: payment_method
+        type: categorical
+      - name: order_payment_attempted
+        type: categorical
+        expr: IF(order_payment_attempted = TRUE, 'Yes', 'No')
+
+    measures:
+      - name: num_of_payments
+        agg: count
+        expr: payment_id
+      - name: total_revenue
+        description: Total revenue based on payment amount
+        agg: sum
+        expr: payment_amount
+      - name: max_order_value
+        description: The highest value out of the placed orders.
+        agg: max
+        expr: payment_amount
+      - name: number_of_orders
+        agg: count_distinct
+        expr: order_id
+      - name: number_of_customers
+        agg: count_distinct
+        expr: customer_id
+
+metrics:
+  - name: met_total_revenue
+    description: Total revenue from stripe payments
+    type: simple
+    label: Total revenue
+    type_params:
+      measure: total_revenue
+
+  - name: met_num_of_orders
+    description: Number of orders
+    type: simple
+    label: Number of orders
+    type_params:
+      measure:
+        name: number_of_orders
+        fill_nulls_with: 0
+
+  - name: met_num_of_customers
+    description: Number of customers
+    type: simple
+    label: Number of distinct customers
+    type_params:
+      measure:
+        name: number_of_customers
+        fill_nulls_with: 0
+
+  - name: met_avg_orders_per_customer
+    description: Average number of orders per customer
+    label: Average orders per customer
+    type: ratio
+    type_params:
+      numerator:
+        name: met_num_of_orders
+      denominator:
+        name: met_num_of_customers
+
+  - name: met_cum_num_of_customers
+    description: Cumulative number of customers (all-time)
+    type: cumulative
+    label: All-time number of customers
+    type_params:
+      measure: 
+        name: number_of_customers
+        fill_nulls_with: 0
+
+
