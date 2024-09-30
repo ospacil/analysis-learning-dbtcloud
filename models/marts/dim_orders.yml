@@ -1,5 +1,5 @@
 semantic_models:
-  - name: sem_orders_with_payment_info_if_any
+  - name: orders_with_payment_info
     defaults:
       agg_time_dimension: order_date
     model: ref('dim_orders')
@@ -35,8 +35,8 @@ semantic_models:
       - name: num_of_payments
         agg: count
         expr: payment_id
-      - name: revenue
-        description: Total orders revenue
+      - name: total_revenue
+        description: Total revenue based on payment amount
         agg: sum
         expr: payment_amount
       - name: max_order_value
@@ -49,3 +49,50 @@ semantic_models:
       - name: number_of_customers
         agg: count_distinct
         expr: customer_id
+
+metrics:
+  - name: met_total_revenue
+    description: Total revenue from stripe payments
+    type: simple
+    label: Total revenue
+    type_params:
+      measure: total_revenue
+
+  - name: met_num_of_orders
+    description: Number of orders
+    type: simple
+    label: Number of orders
+    type_params:
+      measure:
+        name: number_of_orders
+        fill_nulls_with: 0
+
+  - name: met_num_of_customers
+    description: Number of customers
+    type: simple
+    label: Number of distinct customers
+    type_params:
+      measure:
+        name: number_of_customers
+        fill_nulls_with: 0
+
+  - name: met_avg_orders_per_customer
+    description: Average number of orders per customer
+    label: Average orders per customer
+    type: ratio
+    type_params:
+      numerator:
+        name: met_num_of_orders
+      denominator:
+        name: met_num_of_customers
+
+  - name: met_cum_num_of_customers
+    description: Cumulative number of customers (all-time)
+    type: cumulative
+    label: All-time number of customers
+    type_params:
+      measure: 
+        name: number_of_customers
+        fill_nulls_with: 0
+
+
